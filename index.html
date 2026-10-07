@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Impero Cosmico</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+
+    background:
+        radial-gradient(circle at 20% 20%, #252565 0%, transparent 25%),
+        radial-gradient(circle at 80% 70%, #46145f 0%, transparent 25%),
+        #050512;
+
+    min-height: 100vh;
+}
+
+.container {
+    width: 95%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    padding: 25px;
+    border-bottom: 2px solid #333366;
+}
+
+h1 {
+    font-size: 42px;
+    margin: 0;
+}
+
+.subtitle {
+    color: #aaa;
+    margin-top: 8px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.stat {
+    background: rgba(20,20,50,.85);
+    border: 1px solid #38386b;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+}
+
+.number {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.income {
+    color: #4cff88;
+}
+
+.section {
+    margin-top: 30px;
+}
+
+.section h2 {
+    border-bottom: 1px solid #333366;
+    padding-bottom: 10px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.card,
+.army-card,
+.war-card {
+    background: rgba(15,15,40,.9);
+    border: 1px solid #38386b;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+}
+
+.emoji {
+    font-size: 45px;
+}
+
+.card h3,
+.army-card h3,
+.war-card h3 {
+    margin: 10px 0;
+}
+
+.card p,
+.army-card p,
+.war-card p {
+    color: #aaa;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #5757ff;
+    color: white;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: .2s;
+}
+
+button:hover {
+    background: #7777ff;
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    background: #33334f;
+    color: #777;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.army {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.power {
+    text-align: center;
+    margin-top: 20px;
+    padding: 20px;
+
+    background: #17172e;
+    border-radius: 15px;
+
+    font-size: 24px;
+}
+
+/* GUERRE */
+
+.war-panel {
+    background:
+        linear-gradient(135deg,
+        rgba(80,10,20,.85),
+        rgba(20,10,35,.95));
+
+    border: 1px solid #8d3040;
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.enemy {
+    background: rgba(0,0,0,.25);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.enemy-name {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.health-bar {
+    height: 22px;
+    background: #252525;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.health {
+    height: 100%;
+    width: 100%;
+    background: #ff3f55;
+    transition: width .3s;
+}
+
+.war-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.attack {
+    background: #d93636;
+}
+
+.attack:hover {
+    background: #f34d4d;
+}
+
+.defend {
+    background: #2874d8;
+}
+
+.defend:hover {
+    background: #3c8cf0;
+}
+
+.war-log {
+    margin-top: 20px;
+
+    height: 160px;
+    overflow-y: auto;
+
+    background: #080812;
+    border-radius: 12px;
+
+    padding: 15px;
+}
+
+.log p {
+    margin: 6px 0;
+    color: #bbb;
+}
+
+.success {
+    color: #4cff88 !important;
+}
+
+.danger {
+    color: #ff5c5c !important;
+}
+
+.warning {
+    color: #ffd34c !important;
+}
+
+.save-status {
+    text-align: center;
+    color: #65ff9a;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.reset {
+    background: #5b2020;
+    margin-top: 20px;
+}
+
+@media (max-width: 800px) {
+
+    .stats,
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .army {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .stats,
+    .cards,
+    .war-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+
+    <h1>🚀 IMPERO COSMICO</h1>
+
+    <div class="subtitle">
+        Costruisci il tuo impero e conquista l'universo
+    </div>
+
+</header>
+
+
+<!-- STATISTICHE -->
+
+<div class="stats">
+
+    <div class="stat">
+        💰 Tesoro
+
+        <div class="number" id="money">
+            $1.000
+        </div>
+    </div>
+
+
+    <div class="stat">
+        📈 Guadagno
+
+        <div class="number income" id="income">
+            $5/sec
+        </div>
+    </div>
+
+
+    <div class="stat">
+        ⚔️ Potenza militare
+
+        <div class="number" id="power">
+            100
+        </div>
+    </div>
+
+</div>
+
+
+<!-- ESPANSIONE -->
+
+<div class="section">
+
+<h2>🌌 Espansione dell'Impero</h2>
+
+<div class="cards">
+
+
+<div class="card">
+
+    <div class="emoji">🌍</div>
+
+    <h3>Pianeti</h3>
+
+    <p>
+        Posseduti:
+        <strong id="planets">1</strong>
+    </p>
+
+    <p>+$5/sec</p>
+
+    <button onclick="buyPlanet()">
+        Colonizza — $500
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <div class="emoji">⭐</div>
+
+    <h3>Stelle</h3>
+
+    <p>
+        Possedute:
+        <strong id="stars">0</strong>
+    </p>
+
+    <p>+$50/sec</p>
+
+    <button onclick="buyStar()">
+        Crea — $5.000
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <div class="emoji">🌌</div>
+
+    <h3>Galassie</h3>
+
+    <p>
+        Possedute:
+        <strong id="galaxies">0</strong>
+    </p>
+
+    <p>+$500/sec</p>
+
+    <button onclick="buyGalaxy()">
+        Crea — $50.000
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <div class="emoji">🪐</div>
+
+    <h3>Universi</h3>
+
+    <p>
+        Posseduti:
+        <strong id="universes">0</strong>
+    </p>
+
+    <p>+$5.000/sec</p>
+
+    <button onclick="buyUniverse()">
+        Crea — $500.000
+    </button>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- ESERCITO -->
+
+<div class="section">
+
+<h2>🛡️ Esercito Imperiale</h2>
+
+<div class="army">
+
+
+<div class="army-card">
+
+    <div class="emoji">🪖</div>
+
+    <h3>Soldati</h3>
+
+    <p>
+        Soldati:
+        <strong id="soldiers">10</strong>
+    </p>
+
+    <p>
+        Potenza: 10 ciascuno
+    </p>
+
+    <button onclick="recruitSoldier()">
+        Recluta — $100
+    </button>
+
+</div>
+
+
+<div class="army-card">
+
+    <div class="emoji">🚀</div>
+
+    <h3>Navi da guerra</h3>
+
+    <p>
+        Navi:
+        <strong id="ships">0</strong>
+    </p>
+
+    <p>
+        Potenza: 100 ciascuna
+    </p>
+
+    <button onclick="buildShip()">
+        Costruisci — $2.000
+    </button>
+
+</div>
+
+</div>
+
+
+<div class="power">
+
+    ⚔️ Potenza dell'esercito:
+
+    <strong id="armyPower">
+        100
+    </strong>
+
+</div>
+
+</div>
+
+
+<!-- GUERRE -->
+
+<div class="section">
+
+<h2>⚔️ Guerre tra Imperi</h2>
+
+<div class="war-panel">
+
+    <div class="enemy">
+
+        <div class="enemy-name" id="enemyName">
+            Impero Galattico
+        </div>
+
+        <p>
+            Potenza nemica:
+            <strong id="enemyPower">
+                150
+            </strong>
+        </p>
+
+        <p>
+            Integrità dell'impero nemico:
+        </p>
+
+        <div class="health-bar">
+
+            <div
+                class="health"
+                id="enemyHealth">
+            </div>
+
+        </div>
+
+        <p>
+            <strong id="enemyHP">
+                100
+            </strong>
+            / 100
+        </p>
+
+    </div>
+
+
+    <div class="war-buttons">
+
+        <button
+            class="attack"
+            onclick="attackEnemy()">
+
+            ⚔️ ATTACCA
+
+        </button>
+
+
+        <button
+            class="defend"
+            onclick="defendEmpire()">
+
+            🛡️ DIFENDI
+
+        </button>
+
+    </div>
+
+
+    <div class="war-log" id="warLog">
+
+        <p>
+            🌌 Nessuna guerra in corso.
+        </p>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- CRONOLOGIA -->
+
+<div class="section">
+
+<h2>📜 Cronache dell'Impero</h2>
+
+<div class="war-log" id="log">
+
+    <p>
+        👑 L'Imperatore è pronto a governare.
+    </p>
+
+</div>
+
+</div>
+
+
+<div class="save-status">
+
+    💾 Salvataggio automatico attivo
+
+</div>
+
+
+<button
+    class="reset"
+    onclick="resetGame()">
+
+    🗑️ Cancella tutti i progressi
+
+</button>
+
+</div>
+
+
+<script>
+
+/*
+==============================================================
+DATI DEL GIOCO
+==============================================================
+*/
+
+let game = {
+
+    money: 1000,
+
+    planets: 1,
+    stars: 0,
+    galaxies: 0,
+    universes: 0,
+
+    soldiers: 10,
+    ships: 0,
+
+    enemy: {
+
+        name: "Impero Galattico",
+
+        power: 150,
+
+        maxHP: 100,
+
+        hp: 100
+
+    }
+
+};
+
+
+/*
+==============================================================
+CARICAMENTO SALVATAGGIO
+==============================================================
+*/
+
+function loadGame() {
+
+    const savedGame =
+        localStorage.getItem("imperoCosmicoSave");
+
+    if (savedGame) {
+
+        try {
+
+            const loaded =
+                JSON.parse(savedGame);
+
+            game = loaded;
+
+            log(
+                "💾 Salvataggio caricato automaticamente!",
+                "success"
+            );
+
+        } catch (error) {
+
+            console.log(
+                "Errore nel caricamento del salvataggio."
+            );
+
+        }
+
+    }
+
+}
+
+
+/*
+==============================================================
+SALVATAGGIO
+==============================================================
+*/
+
+function saveGame() {
+
+    localStorage.setItem(
+        "imperoCosmicoSave",
+        JSON.stringify(game)
+    );
+
+}
+
+
+/*
+==============================================================
+GUADAGNO
+==============================================================
+*/
+
+function incomePerSecond() {
+
+    return (
+
+        game.planets * 5 +
+
+        game.stars * 50 +
+
+        game.galaxies * 500 +
+
+        game.universes * 5000
+
+    );
+
+}
+
+
+/*
+==============================================================
+POTENZA MILITARE
+==============================================================
+*/
+
+function militaryPower() {
+
+    return (
+
+        game.soldiers * 10 +
+
+        game.ships * 100
+
+    );
+
+}
+
+
+/*
+==============================================================
+INTERFACCIA
+==============================================================
+*/
+
+function updateUI() {
+
+    document.getElementById("money").textContent =
+        "$" +
+        Math.floor(game.money)
+        .toLocaleString("it-IT");
+
+
+    document.getElementById("income").textContent =
+        "$" +
+        incomePerSecond()
+        .toLocaleString("it-IT") +
+        "/sec";
+
+
+    document.getElementById("planets").textContent =
+        game.planets;
+
+    document.getElementById("stars").textContent =
+        game.stars;
+
+    document.getElementById("galaxies").textContent =
+        game.galaxies;
+
+    document.getElementById("universes").textContent =
+        game.universes;
+
+
+    document.getElementById("soldiers").textContent =
+        game.soldiers;
+
+    document.getElementById("ships").textContent =
+        game.ships;
+
+
+    document.getElementById("power").textContent =
+        militaryPower();
+
+    document.getElementById("armyPower").textContent =
+        militaryPower();
+
+
+    /*
+    ----------------------------------------------------------
+    NEMICO
+    ----------------------------------------------------------
+    */
+
+    document.getElementById("enemyName").textContent =
+        game.enemy.name;
+
+    document.getElementById("enemyPower").textContent =
+        game.enemy.power;
+
+    document.getElementById("enemyHP").textContent =
+        game.enemy.hp;
+
+
+    const percentage =
+        (game.enemy.hp / game.enemy.maxHP) * 100;
+
+
+    document.getElementById("enemyHealth")
+        .style.width =
+        Math.max(0, percentage) + "%";
+
+}
+
+
+/*
+==============================================================
+LOG GENERALE
+==============================================================
+*/
+
+function log(message, type = "") {
+
+    const box =
+        document.getElementById("log");
+
+    const p =
+        document.createElement("p");
+
+    p.textContent = message;
+
+    if (type) {
+
+        p.className = type;
+
+    }
+
+    box.prepend(p);
+
+}
+
+
+/*
+==============================================================
+LOG GUERRA
+==============================================================
+*/
+
+function warLog(message, type = "") {
+
+    const box =
+        document.getElementById("warLog");
+
+    const p =
+        document.createElement("p");
+
+    p.textContent = message;
+
+    if (type) {
+
+        p.className = type;
+
+    }
+
+    box.prepend(p);
+
+}
+
+
+/*
+==============================================================
+PIANETA
+==============================================================
+*/
+
+function buyPlanet() {
+
+    const cost = 500;
+
+    if (game.money >= cost) {
+
+        game.money -= cost;
+
+        game.planets++;
+
+        log(
+            "🌍 Hai colonizzato un nuovo pianeta!",
+            "success"
+        );
+
+        saveGame();
+        updateUI();
+
+    } else {
+
+        log(
+            "❌ Non hai abbastanza denaro.",
+            "danger"
+        );
+
+    }
+
+}
+
+
+/*
+==============================================================
+STELLA
+==============================================================
+*/
+
+function buyStar() {
+
+    const cost = 5000;
+
+    if (game.money >= cost) {
+
+        game.money -= cost;
+
+        game.stars++;
+
+        log(
+            "⭐ Hai creato una nuova stella!",
+            "success"
+        );
+
+        saveGame();
+        updateUI();
+
+    } else {
+
+        log(
+            "❌ Non hai abbastanza denaro.",
+            "danger"
+        );
+
+    }
+
+}
+
+
+/*
+==============================================================
+GALASSIA
+==============================================================
+*/
+
+function buyGalaxy() {
+
+    const cost = 50000;
+
+    if (game.money >= cost) {
+
+        game.money -= cost;
+
+        game.galaxies++;
+
+        log(
+            "🌌 Hai conquistato una nuova galassia!",
+            "success"
+        );
+
+        saveGame();
+        updateUI();
+
+    } else {
+
+        log(
+            "❌ Ti servono $50.000.",
+            "danger"
+        );
+
+    }
+
+}
+
+
+/*
+==============================================================
+UNIVERSO
+==============================================================
+*/
+
+function buyUniverse() {
+
+    const cost = 500000;
+
+    if (game.money >= cost) {
+
+        game.money -= cost;
+
+        game.universes++;
+
+        log(
+            "🪐 Hai creato un nuovo UNIVERSO!",
+            "success"
+        );
+
+        saveGame();
+        updateUI();
+
+    } else {
+
+        log(
+            "❌ Ti servono $500.000.",
+            "danger"
+        );
+
+    }
+
+}
+
+
+/*
+==============================================================
+SOLDATO
+==============================================================
+*/
+
+function recruitSoldier() {
+
+    const cost = 100;
+
+    if (game.money >= cost) {
+
+        game.money -= cost;
+
+        game.soldiers++;
+
+        log(
+            "🪖 Un nuovo soldato è entrato nell'esercito."
+        );
+
+        saveGame();
+        updateUI();
+
+    } else {
+
+        log(
+            "❌ Non puoi permetterti un soldato.",
+            "danger"
+        );
+
+    }
+
+}
+
+
+/*
+==============================================================
+NAVE
+==============================================================
+*/
+
+function buildShip() {
+
+    const cost = 2000;
+
+    if (game.money >= cost) {
+
+        game.money -= cost;
+
+        game.ships++;
+
+        log(
+            "🚀 Nuova nave da guerra costruita!",
+            "success"
+        );
+
+        saveGame();
+        updateUI();
+
+    } else {
+
+        log(
+            "❌ Non hai abbastanza denaro.",
+            "danger"
+        );
+
+    }
+
+}
+
+
+/*
+==============================================================
+ATTACCO
+==============================================================
+*/
+
+function attackEnemy() {
+
+    const power =
+        militaryPower();
+
+
+    if (power <= 0) {
+
+        warLog(
+            "❌ Non hai un esercito!",
+            "danger"
+        );
+
+        return;
+
+    }
+
+
+    /*
+    Danno casuale basato sulla potenza
+    */
+
+    const damage = Math.max(
+
+        5,
+
+        Math.floor(
+            power / 20 +
+            Math.random() * 10
+        )
+
+    );
+
+
+    game.enemy.hp -= damage;
+
+
+    warLog(
+        "⚔️ Il tuo esercito ha inflitto " +
+        damage +
+        " danni!",
+        "success"
+    );
+
+
+    /*
+    VITTORIA
+    */
+
+    if (game.enemy.hp <= 0) {
+
+        const reward =
+            game.enemy.power * 20;
+
+
+        game.money += reward;
+
+
+        warLog(
+            "🏆 VITTORIA! Hai sconfitto " +
+            game.enemy.name +
+            "!",
+            "success"
+        );
+
+
+        warLog(
+            "💰 Hai ricevuto $" +
+            reward +
+            " come bottino!",
+            "success"
+        );
+
+
+        log(
+            "🏆 Hai vinto una guerra contro " +
+            game.enemy.name + "!",
+            "success"
+        );
+
+
+        /*
+        Nuovo impero nemico
+        */
+
+        createNewEnemy();
+
+
+    } else {
+
+        /*
+        Il nemico reagisce
+        */
+
+        enemyAttack();
+
+    }
+
+
+    saveGame();
+    updateUI();
+
+}
+
+
+/*
+==============================================================
+ATTACCO NEMICO
+==============================================================
+*/
+
+function enemyAttack() {
+
+    const defense =
+        militaryPower();
+
+
+    let damage;
+
+
+    if (defense <= 0) {
+
+        damage = 100;
+
+    } else {
+
+        damage = Math.max(
+
+            1,
+
+            Math.floor(
+                game.enemy.power / 20 -
+                defense / 200
+            )
+
+        );
+
+    }
+
+
+    /*
+    Probabilità che l'esercito
+    difenda con successo
+    */
+
+    const chance =
+        Math.random();
+
+
+    if (chance < 0.20) {
+
+        warLog(
+            "🛡️ Il tuo esercito ha bloccato l'attacco nemico!",
+            "success"
+        );
+
+        return;
+
+    }
+
+
+    /*
+    Il nemico danneggia l'economia
+    */
+
+    const moneyDamage =
+        Math.min(
+            game.money,
+            damage * 100
+        );
+
+
+    game.money -= moneyDamage;
+
+
+    warLog(
+        "💥 Il nemico ha saccheggiato $" +
+        moneyDamage + "!",
+        "danger"
+    );
+
+
+    /*
+    Perdite militari
+    */
+
+    const casualties =
+        Math.min(
+            game.soldiers,
+            Math.floor(damage / 3)
+        );
+
+
+    if (casualties > 0) {
+
+        game.soldiers -= casualties;
+
+        warLog(
+            "🪖 Hai perso " +
+            casualties +
+            " soldati!",
+            "danger"
+        );
+
+    }
+
+}
+
+
+/*
+==============================================================
+DIFESA
+==============================================================
+*/
+
+function defendEmpire() {
+
+    const power =
+        militaryPower();
+
+
+    const defenseBonus =
+        Math.floor(power / 10);
+
+
+    const reward =
+        Math.floor(defenseBonus * 2);
+
+
+    game.money += reward;
+
+
+    warLog(
+        "🛡️ L'esercito ha rafforzato le difese.",
+        "success"
+    );
+
+
+    warLog(
+        "💰 Hai ottenuto $" +
+        reward +
+        " grazie alla difesa.",
+        "success"
+    );
+
+
+    /*
+    Piccola possibilità di contrattacco
+    */
+
+    if (Math.random() < 0.35) {
+
+        game.enemy.hp -=
+            Math.floor(power / 30);
+
+        warLog(
+            "⚡ Le tue difese hanno contrattaccato!",
+            "success"
+        );
+
+    }
+
+
+    saveGame();
+    updateUI();
+
+}
+
+
+/*
+==============================================================
+NUOVO NEMICO
+==============================================================
+*/
+
+function createNewEnemy() {
+
+    const names = [
+
+        "Impero Galattico",
+        "Federazione Stellare",
+        "Dominio Oscuro",
+        "Alleanza di Andromeda",
+        "Impero dei Titani",
+        "Regno delle Nebulose",
+        "Coalizione Cosmica",
+        "Legione delle Stelle"
+
+    ];
+
+
+    const name =
+        names[
+            Math.floor(
+                Math.random() * names.length
+            )
+        ];
+
+
+    /*
+    I nemici diventano progressivamente
+    più forti.
+    */
+
+    const oldPower =
+        game.enemy.power;
+
+
+    const newPower =
+        oldPower +
+        Math.floor(
+            Math.random() * 100
+        ) +
+        50;
+
+
+    game.enemy = {
+
+        name: name,
+
+        power: newPower,
+
+        maxHP:
+            100 +
+            Math.floor(newPower / 5),
+
+        hp:
+            100 +
+            Math.floor(newPower / 5)
+
+    };
+
+
+    warLog(
+        "🌌 È comparso un nuovo nemico: " +
+        name + "!",
+        "warning"
+    );
+
+}
+
+
+/*
+==============================================================
+ECONOMIA AUTOMATICA
+==============================================================
+*/
+
+setInterval(() => {
+
+    game.money +=
+        incomePerSecond();
+
+
+    updateUI();
+
+    saveGame();
+
+}, 1000);
+
+
+/*
+==============================================================
+SALVATAGGIO QUANDO SI CHIUDE LA PAGINA
+==============================================================
+*/
+
+window.addEventListener(
+    "beforeunload",
+    saveGame
+);
+
+
+/*
+==============================================================
+RESET
+==============================================================
+*/
+
+function resetGame() {
+
+    const confirmReset =
+        confirm(
+            "Sei sicuro? Tutti i progressi verranno cancellati."
+        );
+
+
+    if (!confirmReset) {
+        return;
+    }
+
+
+    localStorage.removeItem(
+        "imperoCosmicoSave"
+    );
+
+
+    location.reload();
+
+}
+
+
+/*
+==============================================================
+AVVIO
+==============================================================
+*/
+
+loadGame();
+
+updateUI();
+
+</script>
+
+</body>
+</html>
